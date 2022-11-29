@@ -11,4 +11,8 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Property.Api.Core.Enum\Property.Api.Core.Enum.csproj" />
+    </ItemGroup>
+
 </Project>

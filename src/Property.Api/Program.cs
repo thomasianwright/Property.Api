@@ -22,7 +22,6 @@ builder.Services.AddDbContext<ApiContext>(x =>
     x.UseSqlServer(builder.Configuration.GetConnectionString("ApiConnection"),
         optionsBuilder => { optionsBuilder.MigrationsAssembly(typeof(ApiContext).Assembly.FullName); });
 });
-
 builder.Services.AddSingleton<IHashids>(_ => new Hashids(builder.Configuration["Hashids:Salt"], 8));
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();

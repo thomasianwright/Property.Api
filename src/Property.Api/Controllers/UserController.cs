@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Property.Api.Contracts.Services;
 using Property.Api.Core.Models;
+using Property.Api.Entities.Models;
 
 namespace Property.Api.Controllers;
 
@@ -103,4 +104,25 @@ public class UserController : ControllerBase
             return BadRequest("An unknown error has occured");
         }
     }
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateUser(UpdateUserDto userDto, string? userId = null)
+    {
+        try
+        {
+            var userIdDecoded = userId == null
+                ? _hashids.DecodeSingle(User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value)
+                : _hashids.DecodeSingle(userId);
+
+            var updatedUser = await _userService.UpdateUserAsync(userIdDecoded, userDto);
+
+            return Ok(updatedUser);
+        }
+        catch
+        {
+            // TODO add logging and check for roles
+
+            return BadRequest();
+        }
+    } 
 }
