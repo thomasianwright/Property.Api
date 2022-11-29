@@ -2,6 +2,7 @@ using HashidsNet;
 using Microsoft.AspNetCore.Mvc;
 using Property.Api.Contracts.Services;
 using Property.Api.Core.Models;
+using Property.Api.Entities.Models;
 
 namespace Property.Api.Controllers;
 
@@ -19,6 +20,8 @@ public class AccountController : ControllerBase
     }
     
     [HttpGet]
+    [ProducesResponseType(typeof(AccountDto), 200)]
+    [ProducesResponseType(typeof(string), 500)]
     public async Task<IActionResult> GetAccount(string id)
     {
         try
@@ -36,6 +39,8 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost]
+    [ProducesResponseType(typeof(AccountDto), 200)]
+    [ProducesResponseType(typeof(string), 500)]
     public async Task<IActionResult> CreateAccount([FromBody] CreateAccountDto request)
     {
         try
@@ -51,6 +56,8 @@ public class AccountController : ControllerBase
     }
     
     [HttpPut]
+    [ProducesResponseType(typeof(AccountDto), 200)]
+    [ProducesResponseType(typeof(string), 500)]
     public async Task<IActionResult> UpdateAccount([FromBody] UpdateAccountDto request, string id)
     {
         try
@@ -68,6 +75,8 @@ public class AccountController : ControllerBase
     }
 
     [HttpDelete]
+    [ProducesResponseType(typeof(AccountDto), 200)]
+    [ProducesResponseType(typeof(string), 500)]
     public async Task<IActionResult> RemoveAccount(string id)
     {
         try

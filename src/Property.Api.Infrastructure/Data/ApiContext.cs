@@ -29,7 +29,12 @@ public class ApiContext : DbContext
 
         mb.Entity<Account>()
             .HasMany(x => x.Users)
-            .WithMany(x => x.Accounts);
+            .WithMany(x => x.Accounts)
+            .UsingEntity<AccountUser>(x =>
+            {
+                x.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
+                x.HasOne(x => x.Account).WithMany().HasForeignKey(x => x.AccountId).OnDelete(DeleteBehavior.NoAction);
+            });
 
         mb.Entity<Account>()
             .HasMany(x => x.RentalAgreements)
@@ -49,12 +54,19 @@ public class ApiContext : DbContext
         mb.Entity<PropertyModel>()
             .HasOne(x => x.Company)
             .WithMany(x => x.Properties)
-            .HasForeignKey(x => x.PropertyCompanyId);
+            .HasForeignKey(x => x.PropertyCompanyId)
+            .OnDelete(DeleteBehavior.ClientNoAction);
 
         mb.Entity<RentalAgreement>()
             .HasOne(x => x.Account)
             .WithMany(x => x.RentalAgreements)
             .HasForeignKey(x => x.RentalAgreementAccountId);
+
+        mb.Entity<RentalAgreement>()
+            .HasOne(x => x.Property)
+            .WithOne(x => x.RentalAgreement)
+            .HasForeignKey<RentalAgreement>(x => x.RentalAgreementPropertyId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         mb.Entity<RentalAgreement>()
             .HasOne(x => x.Company)
@@ -65,16 +77,16 @@ public class ApiContext : DbContext
             .Property(x => x.Files)
             .HasConversion(x => JsonSerializer.Serialize(x, jsonOptions),
                 x => JsonSerializer.Deserialize<List<Guid>>(x, jsonOptions) ?? new List<Guid>());
-        
+
         mb.Entity<Account>()
-            .HasOne(x=> x.AccountOwner)
+            .HasOne(x => x.AccountOwner)
             .WithOne()
             .HasForeignKey<Account>(x => x.AccountUserOwnerId);
-        
+
         mb.Entity<User>()
             .HasIndex(x => x.Email)
             .IsUnique();
-        
+
         base.OnModelCreating(mb);
     }
 }

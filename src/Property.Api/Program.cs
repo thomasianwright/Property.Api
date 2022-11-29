@@ -29,6 +29,8 @@ builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
 builder.Services.AddScoped<IRentalAgreementRepository, RentalAgreementRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IPropertyService, PropertyService>();
 
 var app = builder.Build();
 

@@ -24,7 +24,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "CanGetUsersAdmin")]
+    // [Authorize(Policy = "CanGetUsersAdmin")]
     public async Task<IActionResult> GetUser(string id)
     {
         try
@@ -46,7 +46,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "CanReadCompanyUsers")]
+    // [Authorize(Policy = "CanReadCompanyUsers")]
     public async Task<IActionResult> GetUser(string id, string companyId)
     {
         try
@@ -68,7 +68,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = "CanReadCompanyUsers")]
+    // [Authorize(Policy = "CanReadCompanyUsers")]
     public async Task<IActionResult> GetUsers(string companyId)
     {
         try
