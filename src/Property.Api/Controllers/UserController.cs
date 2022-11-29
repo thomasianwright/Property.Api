@@ -3,6 +3,7 @@ using HashidsNet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Property.Api.Contracts.Services;
+using Property.Api.Core.Models;
 
 namespace Property.Api.Controllers;
 
@@ -22,7 +23,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "CanGetUsersAdmin")]
     public async Task<IActionResult> GetUser(string id)
     {
         try
@@ -44,7 +45,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "CompanyAdmin")]
+    [Authorize(Policy = "CanReadCompanyUsers")]
     public async Task<IActionResult> GetUser(string id, string companyId)
     {
         try
@@ -64,6 +65,42 @@ public class UserController : ControllerBase
             return BadRequest(e.Message);
         }
     }
-    
-    
+
+    [HttpGet]
+    [Authorize(Policy = "CanReadCompanyUsers")]
+    public async Task<IActionResult> GetUsers(string companyId)
+    {
+        try
+        {
+            Guard.Against.NullOrWhiteSpace(companyId);
+            
+            var decodedCompanyId = _hashids.DecodeSingle(companyId);
+
+            var users = await _userService.GetUsers(decodedCompanyId);
+
+            return Ok(users);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "error getting users");
+            
+            return BadRequest("An unknown error has occured");
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateUser(CreateUserDto userDto)
+    {
+        try
+        {
+            var newUser = await _userService.CreateUserAsync(userDto);
+
+            return Ok(newUser);
+        }
+        catch
+        {
+            // Need check for duplicate email
+            return BadRequest("An unknown error has occured");
+        }
+    }
 }
