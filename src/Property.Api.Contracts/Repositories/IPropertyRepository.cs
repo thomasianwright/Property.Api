@@ -5,7 +5,8 @@ public interface IPropertyRepository
 {
     Task<PropertyModel?> GetPropertyByIdAsync(int id);
     Task<IEnumerable<PropertyModel?>> GetPropertiesAsync();
-    Task AddPropertyAsync(PropertyModel? property);
-    Task UpdatePropertyAsync(PropertyModel? property);
+    Task<IEnumerable<PropertyModel?>> GetPropertiesAsync(int companyId);
+    Task<PropertyModel?> AddPropertyAsync(PropertyModel? property);
+    Task<PropertyModel?> UpdatePropertyAsync(PropertyModel? property);
     Task DeletePropertyAsync(PropertyModel? property);
 }

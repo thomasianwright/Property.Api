@@ -12,5 +12,9 @@ public class UserMapping : Profile
         CreateMap<User, UserDto>()
             .ForMember(d => d.Id, opt => opt.ConvertUsing<IntToHash, int>())
             .ForMember(d => d.UserCompanyId, opt => opt.ConvertUsing<IntToHash, int>());
+
+        CreateMap<UpdateUserDto, User>();
+
+        CreateMap<CreateUserDto, User>();
     }
 }
