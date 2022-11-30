@@ -10,11 +10,17 @@ public class UserRepository : IUserRepository
     }
 
     public async Task<User?> GetAsync(int id)
-        => await _apiContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+        => await _apiContext.Users
+            .Include(x => x.Address)
+            .Include(x => x.Company)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
     public async Task<User?> GetAsync(int id, int companyId)
-        => await _apiContext.Users.FirstOrDefaultAsync(x => x.Id == id && x.UserCompanyId == companyId);
-    
+        => await _apiContext.Users
+            .Include(x=> x.Address)
+            .Include(x=>x.Company)
+            .FirstOrDefaultAsync(x => x.Id == id && x.UserCompanyId == companyId);
+
     public Task<IEnumerable<User>> GetUsers()
         => Task.FromResult(_apiContext.Users.AsEnumerable());
 
@@ -36,16 +42,16 @@ public class UserRepository : IUserRepository
     public async Task<User?> UpdateAsync(User user)
     {
         var newUser = _apiContext.Users.Update(user);
-        
+
         await _apiContext.SaveChangesAsync();
-        
+
         return newUser.Entity;
     }
 
     public async Task DeleteAsync(User user)
     {
         _apiContext.Users.Remove(user);
-        
+
         await _apiContext.SaveChangesAsync();
     }
 }

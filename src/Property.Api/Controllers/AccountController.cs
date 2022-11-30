@@ -22,7 +22,7 @@ public class AccountController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(AccountDto), 200)]
     [ProducesResponseType(typeof(string), 500)]
-    public async Task<IActionResult> GetAccount(string id)
+    public async Task<IActionResult> GetAccount([FromQuery] string id)
     {
         try
         {
@@ -58,7 +58,7 @@ public class AccountController : ControllerBase
     [HttpPut]
     [ProducesResponseType(typeof(AccountDto), 200)]
     [ProducesResponseType(typeof(string), 500)]
-    public async Task<IActionResult> UpdateAccount([FromBody] UpdateAccountDto request, string id)
+    public async Task<IActionResult> UpdateAccount([FromBody] UpdateAccountDto request, [FromQuery] string id)
     {
         try
         {
@@ -77,7 +77,7 @@ public class AccountController : ControllerBase
     [HttpDelete]
     [ProducesResponseType(typeof(AccountDto), 200)]
     [ProducesResponseType(typeof(string), 500)]
-    public async Task<IActionResult> RemoveAccount(string id)
+    public async Task<IActionResult> RemoveAccount([FromQuery] string id)
     {
         try
         {

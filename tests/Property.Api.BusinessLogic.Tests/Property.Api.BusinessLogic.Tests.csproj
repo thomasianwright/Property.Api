@@ -27,12 +27,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\Property.Api.BusinessLogic\Property.Api.BusinessLogic.csproj" />
       <ProjectReference Include="..\..\src\Property.Api.Contracts\Property.Api.Contracts.csproj" />
       <ProjectReference Include="..\..\src\Property.Api.Entities\Property.Api.Entities.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Services" />
     </ItemGroup>
 
 </Project>

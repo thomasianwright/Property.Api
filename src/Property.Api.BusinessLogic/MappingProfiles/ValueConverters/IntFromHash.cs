@@ -14,6 +14,7 @@ public class IntFromHash : IValueConverter<string, int>
 
     public int Convert(string source, ResolutionContext context)
     {
+        if (string.IsNullOrWhiteSpace(source)) return -1;
         return hashids.DecodeSingle(source);
     }
 }

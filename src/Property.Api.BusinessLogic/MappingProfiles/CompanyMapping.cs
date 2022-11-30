@@ -10,6 +10,6 @@ public class CompanyMapping : Profile
     public CompanyMapping()
     {
         CreateMap<Company, CompanyDto>()
-            .ForMember(x => x.Id, opt => opt.ConvertUsing<IntToHash, int>());
+            .ForMember(x => x.Id, opt => opt.ConvertUsing<IntToHash, int?>());
     }
 }

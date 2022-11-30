@@ -302,7 +302,7 @@ namespace Property.Api.Infrastructure.Migrations
                     b.HasOne("Property.Api.Entities.Models.Address", "TradingAddress")
                         .WithOne()
                         .HasForeignKey("Property.Api.Entities.Models.Company", "TradingAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("TradingAddress");
@@ -313,7 +313,7 @@ namespace Property.Api.Infrastructure.Migrations
                     b.HasOne("Property.Api.Entities.Models.Address", "PropertyAddress")
                         .WithOne()
                         .HasForeignKey("Property.Api.Entities.Models.Property", "PropertyAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Property.Api.Entities.Models.Company", "Company")

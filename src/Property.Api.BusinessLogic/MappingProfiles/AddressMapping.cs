@@ -10,6 +10,8 @@ public class AddressMapping : Profile
     public AddressMapping()
     {
         CreateMap<Address, AddressDto>()
-            .ForMember(x => x.Id, opt => opt.ConvertUsing<IntToHash, int>());
+            .ForMember(x => x.Id, opt => opt.ConvertUsing<IntToHash, int?>());
+
+        CreateMap<CreateAddressDto, Address>();
     }
 }

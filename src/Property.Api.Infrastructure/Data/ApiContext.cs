@@ -44,12 +44,14 @@ public class ApiContext : DbContext
         mb.Entity<Company>()
             .HasOne(x => x.TradingAddress)
             .WithOne()
-            .HasForeignKey<Company>(x => x.TradingAddressId);
+            .HasForeignKey<Company>(x => x.TradingAddressId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         mb.Entity<PropertyModel>()
             .HasOne(x => x.PropertyAddress)
             .WithOne()
-            .HasForeignKey<PropertyModel>(x => x.PropertyAddressId);
+            .HasForeignKey<PropertyModel>(x => x.PropertyAddressId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         mb.Entity<PropertyModel>()
             .HasOne(x => x.Company)

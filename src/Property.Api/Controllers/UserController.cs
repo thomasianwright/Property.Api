@@ -25,7 +25,7 @@ public class UserController : ControllerBase
 
     [HttpGet]
     // [Authorize(Policy = "CanGetUsersAdmin")]
-    public async Task<IActionResult> GetUser(string id)
+    public async Task<IActionResult> AdminGetUser([FromQuery] string id)
     {
         try
         {
@@ -38,27 +38,27 @@ public class UserController : ControllerBase
         catch (Exception e)
         {
             var userId = User.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
-            
+
             _logger.LogError(e, "error getting user, request by {}", userId ?? "unknown");
-            
+
             return BadRequest("An unknown error has occured");
         }
     }
 
     [HttpGet]
     // [Authorize(Policy = "CanReadCompanyUsers")]
-    public async Task<IActionResult> GetUser(string id, string companyId)
+    public async Task<IActionResult> GetUser([FromQuery] string id, [FromQuery] string companyId)
     {
         try
         {
             Guard.Against.NullOrWhiteSpace(id);
             Guard.Against.NullOrWhiteSpace(companyId);
-            
+
             var userId = _hashids.Decode(id).First();
             var companyIdDecoded = _hashids.Decode(companyId).First();
 
             var user = await _userService.GetUserAsync(userId, companyIdDecoded);
-            
+
             return Ok(user);
         }
         catch (ArgumentNullException e)
@@ -69,12 +69,12 @@ public class UserController : ControllerBase
 
     [HttpGet]
     // [Authorize(Policy = "CanReadCompanyUsers")]
-    public async Task<IActionResult> GetUsers(string companyId)
+    public async Task<IActionResult> GetUsers([FromQuery] string companyId)
     {
         try
         {
             Guard.Against.NullOrWhiteSpace(companyId);
-            
+
             var decodedCompanyId = _hashids.DecodeSingle(companyId);
 
             var users = await _userService.GetUsers(decodedCompanyId);
@@ -84,13 +84,13 @@ public class UserController : ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, "error getting users");
-            
+
             return BadRequest("An unknown error has occured");
         }
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser(CreateUserDto userDto)
+    public async Task<IActionResult> CreateUser([FromBody] CreateUserDto userDto)
     {
         try
         {
@@ -98,7 +98,7 @@ public class UserController : ControllerBase
 
             return Ok(newUser);
         }
-        catch
+        catch(Exception e)
         {
             // Need check for duplicate email
             return BadRequest("An unknown error has occured");
@@ -106,7 +106,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateUser(UpdateUserDto userDto, string? userId = null)
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDto userDto, [FromQuery] string? userId = null)
     {
         try
         {
@@ -124,5 +124,5 @@ public class UserController : ControllerBase
 
             return BadRequest();
         }
-    } 
+    }
 }

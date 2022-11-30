@@ -11,12 +11,12 @@ public class RentalAgreementMapping : Profile
     {
         CreateMap<RentalAgreement, RentalAgreementDto>()
             .ForMember(x => x.Id, 
-                opt => opt.ConvertUsing<IntToHash, int>())
+                opt => opt.ConvertUsing<IntToHash, int?>())
             .ForMember(x => x.RentalAgreementAccountId, 
-                opt => opt.ConvertUsing<IntToHash, int>())
+                opt => opt.ConvertUsing<IntToHash, int?>())
             .ForMember(x => x.RentalAgreementPropertyId, 
-                opt => opt.ConvertUsing<IntToHash, int>())
+                opt => opt.ConvertUsing<IntToHash, int?>())
             .ForMember(x => x.RentalAgreementCompanyId, 
-                opt => opt.ConvertUsing<IntToHash, int>());
+                opt => opt.ConvertUsing<IntToHash, int?>());
     }
 }

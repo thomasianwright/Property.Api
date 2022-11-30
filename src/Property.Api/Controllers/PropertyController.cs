@@ -22,7 +22,7 @@ public class PropertyController : ControllerBase
     
     [HttpGet]
     [ProducesResponseType(typeof(PropertyDto), 200)]
-    public async Task<IActionResult> Get([FromQuery] string id)
+    public async Task<IActionResult> GetProperty([FromQuery] string id)
     {
         try
         {
@@ -77,7 +77,7 @@ public class PropertyController : ControllerBase
     [HttpPut]
     [ProducesResponseType(typeof(PropertyDto), 200)]
     [ProducesResponseType(typeof(string), 500)]
-    public async Task<IActionResult> Update([FromBody] UpdatePropertyDto request, string id)
+    public async Task<IActionResult> Update([FromBody] UpdatePropertyDto request, [FromQuery] string id)
     {
         try
         {
@@ -95,7 +95,7 @@ public class PropertyController : ControllerBase
     [HttpDelete]
     [ProducesResponseType(typeof(PropertyDto), 200)]
     [ProducesResponseType(typeof(string), 500)]
-    public async Task<IActionResult> Delete(string id)
+    public async Task<IActionResult> Delete([FromQuery] string id)
     {
         try
         {

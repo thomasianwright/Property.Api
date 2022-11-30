@@ -4,10 +4,9 @@ using Property.Api.BusinessLogic.MappingProfiles;
 using Property.Api.BusinessLogic.Services;
 using Property.Api.Contracts.Repositories;
 using Property.Api.Contracts.Services;
-using Property.Api.Entities.Models;
 using Property.Api.Infrastructure.Data;
 using Property.Api.Infrastructure.Repositories;
-
+    
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,7 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations();
+});
 builder.Services.AddAutoMapper(typeof(UserMapping).Assembly);
 builder.Services.AddDbContext<ApiContext>(x =>
 {
