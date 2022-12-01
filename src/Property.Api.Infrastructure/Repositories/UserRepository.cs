@@ -29,6 +29,9 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetAsync(string email)
         => await _apiContext.Users.FirstOrDefaultAsync(x => x.Email == email);
+    
+    public async Task<User?> GetByRefreshTokenAsync(string refreshToken)
+        => await _apiContext.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken && x.RefreshTokenExpiryTime > DateTime.UtcNow);
 
     public async Task<User?> AddAsync(User user)
     {

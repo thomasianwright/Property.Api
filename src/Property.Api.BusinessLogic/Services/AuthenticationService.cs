@@ -32,7 +32,14 @@ public class AuthenticationService : IAuthenticationService
 
         return user;
     }
-    
+
+    public async Task<User?> Authenticate(string refreshToken)
+    {
+        var user = await _userRepository.GetByRefreshTokenAsync(refreshToken);
+
+        return user;
+    }
+
     public async Task AddRefreshToken(User user, string refreshToken, string ip, DateTime expiry)
     {
         user.RefreshToken = refreshToken;
