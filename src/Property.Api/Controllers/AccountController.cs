@@ -1,3 +1,4 @@
+using System.Text.Json;
 using HashidsNet;
 using Microsoft.AspNetCore.Mvc;
 using Property.Api.Contracts.Services;
@@ -12,11 +13,13 @@ public class AccountController : ControllerBase
 {
     private readonly IHashids _hashids;
     private readonly IAccountService _accountService;
+    private readonly ILogger<AccountController> _logger;
 
-    public AccountController(IHashids hashids, IAccountService accountService)
+    public AccountController(IHashids hashids, IAccountService accountService, ILogger<AccountController> logger)
     {
         _hashids = hashids;
         _accountService = accountService;
+        _logger = logger;
     }
     
     [HttpGet]
@@ -49,9 +52,10 @@ public class AccountController : ControllerBase
 
             return Ok(account);
         }
-        catch
+        catch(Exception e)
         {
-            return BadRequest();
+            _logger.LogError(e, "An error occured while creating an account");
+            return BadRequest(JsonSerializer.Serialize(e));
         }
     }
     

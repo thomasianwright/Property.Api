@@ -71,6 +71,8 @@ public class UserService : IUserService
             throw new ConstraintException("User id does not match");
         }
         
+        user.UpdatedAt = DateTime.Now;
+
         var updatedUser = await _userRepository.UpdateAsync(user);
         
         return updatedUser == null ? null : _mapper.Map<UserDto>(updatedUser);

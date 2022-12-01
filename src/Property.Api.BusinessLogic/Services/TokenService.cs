@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using HashidsNet;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Property.Api.BusinessLogic.Options;
@@ -12,10 +13,12 @@ namespace Property.Api.BusinessLogic.Services;
 
 public class TokenService : ITokenService
 {
+    private readonly IHashids _hashids;
     private readonly JwtOptions _jwtOptions;
 
-    public TokenService(IOptions<JwtOptions> jwtOptions)
+    public TokenService(IOptions<JwtOptions> jwtOptions, IHashids hashids)
     {
+        _hashids = hashids;
         _jwtOptions = jwtOptions.Value;
     }
 
@@ -23,13 +26,12 @@ public class TokenService : ITokenService
     {
         var key = Encoding.ASCII.GetBytes(_jwtOptions.Secret);
         var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature);
-        
+        var userId = _hashids.Encode(user.Id);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim("Id", Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, userId),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti,
                     Guid.NewGuid().ToString())
