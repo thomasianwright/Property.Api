@@ -1,12 +1,3 @@
-using AutoMapper;
-using FluentAssertions;
-using Moq;
-using Property.Api.BusinessLogic.MappingProfiles;
-using Property.Api.BusinessLogic.Services;
-using Property.Api.Contracts.Repositories;
-using Property.Api.Contracts.Services;
-using Property.Api.Core.Models;
-
 namespace Property.Api.BusinessLogic.Tests.Services;
 
 public class AuthenticationServiceTests
