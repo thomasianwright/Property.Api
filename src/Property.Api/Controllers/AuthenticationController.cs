@@ -1,4 +1,5 @@
 using Ardalis.GuardClauses;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Property.Api.Contracts.Services;
 using Property.Api.Core.Helpers;
@@ -12,11 +13,13 @@ public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticationService _authenticationService;
     private readonly ITokenService _tokenService;
+    private readonly IMapper _mapper;
 
-    public AuthenticationController(IAuthenticationService authenticationService, ITokenService tokenService)
+    public AuthenticationController(IAuthenticationService authenticationService, ITokenService tokenService, IMapper mapper)
     {
         _authenticationService = authenticationService;
         _tokenService = tokenService;
+        _mapper = mapper;
     }
     
     [HttpPost]
@@ -76,7 +79,9 @@ public class AuthenticationController : ControllerBase
         {
             var user = await _authenticationService.Register(userDto);
 
-            return Ok();
+            var newUser = _mapper.Map<UserDto>(user);
+            
+            return Ok(newUser);
         }
         catch(Exception e)
         {
