@@ -19,4 +19,7 @@ public class UserDto
 
     public string? UserCompanyId { get; set; }
     public CompanyDto? Company { get; set; }
+    
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }
