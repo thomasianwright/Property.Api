@@ -16,6 +16,10 @@ public class User
     public ICollection<Account> Accounts { get; set; }
     public int? UserCompanyId { get; set; }
     public Company? Company { get; set; }
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
+    public string? LastLoginIp { get; set; }
+    public DateTime? LastLoginDate { get; set; }
 
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

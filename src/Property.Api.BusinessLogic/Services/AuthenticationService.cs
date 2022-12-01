@@ -8,7 +8,7 @@ using Property.Api.Entities.Models;
 
 namespace Property.Api.BusinessLogic.Services;
 
-public class AuthenticationService
+public class AuthenticationService : IAuthenticationService
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
@@ -31,6 +31,16 @@ public class AuthenticationService
             throw new AuthenticationException("Password does not match");
 
         return user;
+    }
+    
+    public async Task AddRefreshToken(User user, string refreshToken, string ip, DateTime expiry)
+    {
+        user.RefreshToken = refreshToken;
+        user.LastLoginIp = ip;
+        user.LastLoginDate = DateTime.UtcNow;
+        user.RefreshTokenExpiryTime = expiry;
+        
+        await _userRepository.UpdateAsync(user);
     }
     
     public async Task<User?> Register(CreateUserDto registerDto)
