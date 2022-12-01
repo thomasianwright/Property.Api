@@ -13,12 +13,14 @@ public class UserRepository : IUserRepository
         => await _apiContext.Users
             .Include(x => x.Address)
             .Include(x => x.Company)
+            .Include(x=> x.Accounts)
             .FirstOrDefaultAsync(x => x.Id == id);
 
     public async Task<User?> GetAsync(int id, int companyId)
         => await _apiContext.Users
             .Include(x=> x.Address)
             .Include(x=>x.Company)
+            .Include(x=> x.Accounts)
             .FirstOrDefaultAsync(x => x.Id == id && x.UserCompanyId == companyId);
 
     public Task<IEnumerable<User>> GetUsers()
