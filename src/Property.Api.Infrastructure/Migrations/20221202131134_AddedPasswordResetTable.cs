@@ -38,7 +38,7 @@ namespace Property.Api.Infrastructure.Migrations
                 name: "IX_PasswordReset_PasswordResetUserId",
                 table: "PasswordReset",
                 column: "PasswordResetUserId",
-                unique: true);
+                unique: false);
         }
 
         /// <inheritdoc />
