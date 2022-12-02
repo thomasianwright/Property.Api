@@ -35,14 +35,16 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<User?> Authenticate(string refreshToken)
     {
-        var user = await _userRepository.GetByRefreshTokenAsync(refreshToken);
+        var hashedRefreshToken = HashPassword(refreshToken);
+        
+        var user = await _userRepository.GetByRefreshTokenAsync(hashedRefreshToken);
 
         return user;
     }
 
     public async Task AddRefreshToken(User user, string refreshToken, string ip, DateTime expiry)
     {
-        user.RefreshToken = refreshToken;
+        user.RefreshToken = HashPassword(refreshToken);
         user.LastLoginIp = ip;
         user.LastLoginDate = DateTime.UtcNow;
         user.RefreshTokenExpiryTime = expiry;

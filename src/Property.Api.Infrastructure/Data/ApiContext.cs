@@ -34,6 +34,7 @@ public class ApiContext : DbContext
             {
                 x.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
                 x.HasOne(x => x.Account).WithMany().HasForeignKey(x => x.AccountId).OnDelete(DeleteBehavior.NoAction);
+                x.HasKey(x => new { x.UserId, x.AccountId });
             });
 
         mb.Entity<Account>()

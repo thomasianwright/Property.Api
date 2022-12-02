@@ -47,20 +47,20 @@ namespace Property.Api.Infrastructure.Migrations
 
             modelBuilder.Entity("Property.Api.Entities.Models.AccountUser", b =>
                 {
-                    b.Property<int>("AccountsId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<int>("AccountId")
                         .HasColumnType("int");
 
-                    b.HasKey("AccountsId", "UserId");
+                    b.Property<int>("AccountsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "AccountId");
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("AccountsId");
 
                     b.ToTable("AccountUser");
                 });
