@@ -5,7 +5,7 @@ namespace Property.Api.Contracts.Repositories;
 public interface IPasswordResetRepository
 {
     Task<PasswordReset?> GetPasswordResetAsync(int id);
-    Task CreatePasswordReset(PasswordReset passwordReset);
+    Task<PasswordReset?> CreatePasswordReset(PasswordReset passwordReset);
     Task UpdatePasswordReset(PasswordReset passwordReset);
     Task DeletePasswordReset(PasswordReset passwordReset);
 }

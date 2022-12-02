@@ -1,3 +1,5 @@
+using HashidsNet;
+
 namespace Property.Api.BusinessLogic.Tests.Services;
 
 public class AuthenticationServiceTests
@@ -10,7 +12,10 @@ public class AuthenticationServiceTests
     public async Task Assert_Signup_Of_User_Without_Password_Sends_Password_Via_EmailService()
     {
         var emailService = new Mock<IEmailService>();
-        var userService = new Mock<IUserRepository>();
+        var userRepository = new Mock<IUserRepository>();
+        var passwordResetRepository = new Mock<IPasswordResetRepository>();
+        var hashids = new Hashids("test");
+        
         var mapper = new Mapper(new MapperConfiguration((config =>
         {
             config.AddProfiles(new Profile[]
@@ -20,7 +25,7 @@ public class AuthenticationServiceTests
             });
         })));
 
-        var authenticationService = new AuthenticationService(userService.Object, mapper, emailService.Object);
+        var authenticationService = new AuthenticationService(userRepository.Object, mapper, emailService.Object, passwordResetRepository.Object, hashids);
 
         emailService.Setup(x => x.SendNewUserEmail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Returns(Task.CompletedTask);
@@ -60,7 +65,10 @@ public class AuthenticationServiceTests
     public async Task Assert_Signup_Of_User_With_Password_Does_Not_Send_Password_Via_EmailService()
     {
         var emailService = new Mock<IEmailService>();
-        var userService = new Mock<IUserRepository>();
+        var userRepository = new Mock<IUserRepository>();
+        var passwordResetRepository = new Mock<IPasswordResetRepository>();
+        var hashids = new Hashids("test");
+        
         var mapper = new Mapper(new MapperConfiguration((config =>
         {
             config.AddProfiles(new Profile[]
@@ -70,7 +78,7 @@ public class AuthenticationServiceTests
             });
         })));
 
-        var authenticationService = new AuthenticationService(userService.Object, mapper, emailService.Object);
+        var authenticationService = new AuthenticationService(userRepository.Object, mapper, emailService.Object, passwordResetRepository.Object, hashids);
 
         emailService.Setup(x => x.SendNewUserEmail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Returns(Task.CompletedTask);

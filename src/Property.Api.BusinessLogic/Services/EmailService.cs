@@ -8,11 +8,11 @@ public class EmailService : IEmailService
 {
     public Task SendNewUserEmail(string email, string name, string? password)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public Task SendPasswordResetEmail(string email, string name, string passwordResetToken, string passwordResetId)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 }

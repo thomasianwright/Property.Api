@@ -96,7 +96,10 @@ public class ApiContext : DbContext
             .WithOne()
             .HasForeignKey<PasswordReset>(x => x.PasswordResetUserId)
             .OnDelete(DeleteBehavior.NoAction);
-        
+
+        mb.Entity<PasswordReset>()
+            .HasIndex(x => x.PasswordResetUserId);
+
         base.OnModelCreating(mb);
     }
 }

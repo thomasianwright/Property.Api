@@ -4,6 +4,7 @@ using System.Text;
 using Ardalis.GuardClauses;
 using AutoMapper;
 using HashidsNet;
+using Microsoft.Extensions.Logging;
 using Property.Api.BusinessLogic.Exceptions;
 using Property.Api.Contracts.Repositories;
 using Property.Api.Contracts.Services;
@@ -20,15 +21,17 @@ public class AuthenticationService : IAuthenticationService
     private readonly IEmailService _emailService;
     private readonly IPasswordResetRepository _passwordResetRepository;
     private readonly IHashids _hashids;
+    private readonly ILogger<AuthenticationService> _logger;
 
     public AuthenticationService(IUserRepository userRepository, IMapper mapper, IEmailService emailService,
-        IPasswordResetRepository passwordResetRepository, IHashids hashids)
+        IPasswordResetRepository passwordResetRepository, IHashids hashids, ILogger<AuthenticationService> logger)
     {
         _userRepository = userRepository;
         _mapper = mapper;
         _emailService = emailService;
         _passwordResetRepository = passwordResetRepository;
         _hashids = hashids;
+        _logger = logger;
     }
 
     public async Task<User> Authenticate(LoginDto loginDto)
@@ -107,26 +110,33 @@ public class AuthenticationService : IAuthenticationService
             Email = passwordResetDto.Email,
             CreatedAt = DateTime.Now,
         };
-
-        await _passwordResetRepository.CreatePasswordReset(passwordReset);
+        
+        var createdPasswordReset = await _passwordResetRepository.CreatePasswordReset(passwordReset);
+        Guard.Against.Null(createdPasswordReset, nameof(createdPasswordReset));
+        
+        var passwordResetId = _hashids.Encode(createdPasswordReset.Id);
+#if DEBUG
+        _logger.LogWarning("Password reset identity: {Identity} Id: {Id}", passwordReset.Identity,
+            passwordResetId);
+#endif
         await _emailService.SendPasswordResetEmail(passwordResetDto.Email, $"{user.FirstName} {user.LastName}",
-            passwordReset.Identity.ToString(), _hashids.Encode(passwordReset.Id));
+            passwordReset.Identity.ToString(), passwordResetId);
     }
 
     public async Task GetPasswordReset(string id, string identity)
     {
-        if(!Guid.TryParse(identity, out var guid))
+        if (!Guid.TryParse(identity, out var guid))
             throw new ArgumentException("Invalid identity");
         var passwordResetId = _hashids.DecodeSingle(id);
-        
+
         var passwordReset = await _passwordResetRepository.GetPasswordResetAsync(passwordResetId);
 
         Guard.Against.Null(passwordReset);
-        
+
         if (passwordReset.Expiry < DateTime.UtcNow)
             throw new ArgumentException("Password reset has expired");
-        
-        if (passwordReset.Identity != guid) 
+
+        if (passwordReset.Identity != guid)
             throw new ArgumentException("Invalid identity");
     }
 
