@@ -28,7 +28,6 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.EnableAnnotations();
 });
-builder.Services.AddAutoMapper(typeof(UserMapping).Assembly);
 
 builder.Services.AddDbContext<ApiContext>(x =>
 {
@@ -36,21 +35,28 @@ builder.Services.AddDbContext<ApiContext>(x =>
         optionsBuilder => { optionsBuilder.MigrationsAssembly(typeof(ApiContext).Assembly.FullName); });
 });
 
+// Configure IOptions
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("JwtOptions"));
 
-builder.Services.AddSingleton<IHashids>(_ => new Hashids(builder.Configuration["Hashids:Salt"], 8));
-builder.Services.AddTransient<ITokenService, TokenService>();
+// Repositories
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IPropertyRepository, PropertyRepository>();
 builder.Services.AddScoped<IRentalAgreementRepository, RentalAgreementRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPasswordResetRepository, PasswordResetRepository>();
+
+// Services
+builder.Services.AddAutoMapper(typeof(UserMapping).Assembly);
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IPropertyService, PropertyService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddSingleton<IHashids>(_ => new Hashids(builder.Configuration["Hashids:Salt"], 8));
+builder.Services.AddTransient<ITokenService, TokenService>();
 
+// JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

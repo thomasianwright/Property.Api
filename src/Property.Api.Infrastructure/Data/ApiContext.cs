@@ -11,7 +11,7 @@ public class ApiContext : DbContext
     public DbSet<PropertyModel?> Properties { get; set; }
     public DbSet<RentalAgreement?> RentalAgreements { get; set; }
     public DbSet<User> Users { get; set; }
-
+    public DbSet<PasswordReset?> PasswordResets { get; set; }
     public ApiContext(DbContextOptions<ApiContext> options) : base(options)
     {
     }
@@ -26,7 +26,8 @@ public class ApiContext : DbContext
         mb.Entity<PropertyModel>().ToTable("Property");
         mb.Entity<RentalAgreement>().ToTable("RentalAgreement");
         mb.Entity<User>().ToTable("User");
-
+        mb.Entity<PasswordReset>().ToTable("PasswordReset");
+        
         mb.Entity<Account>()
             .HasMany(x => x.Users)
             .WithMany(x => x.Accounts)
@@ -90,6 +91,12 @@ public class ApiContext : DbContext
             .HasIndex(x => x.Email)
             .IsUnique();
 
+        mb.Entity<PasswordReset>()
+            .HasOne(x => x.User)
+            .WithOne()
+            .HasForeignKey<PasswordReset>(x => x.PasswordResetUserId)
+            .OnDelete(DeleteBehavior.NoAction);
+        
         base.OnModelCreating(mb);
     }
 }
