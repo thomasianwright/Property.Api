@@ -1,4 +1,5 @@
 using HashidsNet;
+using Microsoft.Extensions.Logging;
 
 namespace Property.Api.BusinessLogic.Tests.Services;
 
@@ -14,6 +15,8 @@ public class AuthenticationServiceTests
         var emailService = new Mock<IEmailService>();
         var userRepository = new Mock<IUserRepository>();
         var passwordResetRepository = new Mock<IPasswordResetRepository>();
+        var logger = new Mock<ILogger<AuthenticationService>>();
+        
         var hashids = new Hashids("test");
         
         var mapper = new Mapper(new MapperConfiguration((config =>
@@ -25,7 +28,7 @@ public class AuthenticationServiceTests
             });
         })));
 
-        var authenticationService = new AuthenticationService(userRepository.Object, mapper, emailService.Object, passwordResetRepository.Object, hashids);
+        var authenticationService = new AuthenticationService(userRepository.Object, mapper, emailService.Object, passwordResetRepository.Object, hashids, logger.Object);
 
         emailService.Setup(x => x.SendNewUserEmail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Returns(Task.CompletedTask);
@@ -68,7 +71,8 @@ public class AuthenticationServiceTests
         var userRepository = new Mock<IUserRepository>();
         var passwordResetRepository = new Mock<IPasswordResetRepository>();
         var hashids = new Hashids("test");
-        
+        var logger = new Mock<ILogger<AuthenticationService>>();
+
         var mapper = new Mapper(new MapperConfiguration((config =>
         {
             config.AddProfiles(new Profile[]
@@ -78,7 +82,7 @@ public class AuthenticationServiceTests
             });
         })));
 
-        var authenticationService = new AuthenticationService(userRepository.Object, mapper, emailService.Object, passwordResetRepository.Object, hashids);
+        var authenticationService = new AuthenticationService(userRepository.Object, mapper, emailService.Object, passwordResetRepository.Object, hashids, logger.Object);
 
         emailService.Setup(x => x.SendNewUserEmail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
             .Returns(Task.CompletedTask);
